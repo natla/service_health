@@ -1,0 +1,31 @@
+<form id="service-form" class="clearfix" action="" method="POST">
+  {% csrf_token %}
+
+  {% if service_form.errors or service_form.non_field_errors %}
+  <div class='form-errors'>
+    <p>Sorry! We found the following problems...</p>
+    {{ service_form.non_field_errors }}
+    <ul class='errorlist'>
+      {% for field in service_form %}
+      {% if field.errors %}
+      {% for error in field.errors %}
+      <li><strong>{{ field.label }}</strong>:<br> {{ error|escape }}</li>
+      {% endfor %}
+      {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  {% for field in service_form %}
+  <div class="form-group">
+    {{ field.label_tag }}
+    {{ field }}
+    <p class="help-text">{{ field.help_text|safe }}</p>
+  </div>
+  {% endfor %}
+  <div class="form-group">
+    <input type="submit" value="Send">
+  </div>
+</form>
+<!-- <li id="li-hide-form">&ensp;<i class="fa fa-chevron-up" aria-hidden="true"></i></li> -->

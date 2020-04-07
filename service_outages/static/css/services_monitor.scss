@@ -1,0 +1,443 @@
+body {
+  font-family: 'Open Sans', 'arial', sans-serif;
+  font-size: 14px;
+  background-color: whitesmoke;
+}
+
+ul {
+  list-style-type: none;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Lato', 'Open Sans', 'arial', sans-serif;
+}
+
+h1 {
+  color: #ac3572;
+  font-size: 2em;
+  text-align: center;
+  margin: 2em;
+}
+
+h2 {
+  height: 70px;
+  background-color: #ac3572;
+  color: #fff;
+  font-size: 1.9em;
+  margin: 0;
+  padding: 0.2em 0.4em;
+  text-align: center;
+  line-height: 2.2em;
+  @media (max-width: 990px) {
+    font-size: 1.65em;
+  }
+  @media (max-width: 900px) {
+      font-size: 1.6em;
+  }
+  @media (max-width: 770px) {
+    font-size: 1.5em;
+  }
+
+  a {
+    color: inherit;
+    &:hover {
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+}
+
+nav {
+  min-width: 290px;
+  background-color: #2f3542;
+  padding: 0 !important;
+
+  /* Only stick nav if it can fit */
+  @media (min-height: 300px) {
+    position: sticky !important;
+    top: 0;
+  }
+
+  ul {
+    padding: 0;
+    li {
+      color: #fff;
+      padding: 1em 1.6em;
+      font-size: 16px;
+      font-weight: 300;
+      &:hover, &.active {
+        background-color: #222836;
+        color: #fff;
+      }
+      &.active {
+        color: #ac3572;
+      }
+      @media (max-width: 885px) {
+        text-align: center;
+      }
+    }
+  }
+
+  li#new-service {
+    height: 40px;
+    width: 250px;
+    margin-left: 21px;
+    background-color: #fff;
+    color: #555;
+    font-weight: 600;
+    padding: 0;
+    margin: 1em 0 2em 21px;
+    text-align: center;
+    line-height: 2.2em;
+
+    @media (max-width: 855px) {
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}
+
+/* Overwrite the values of some Bootstrap classes */
+
+.col {
+  flex-grow: 0;
+    @media (max-width: 855px) {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+}
+
+.col-8 {
+  padding: 0;
+  flex-grow: 1;
+  max-width: 100%;
+  @media (max-width: 975px) {
+    -ms-flex: 0 0 61.666667%;
+    flex: 0 0 61.666667%;
+  }
+  @media (max-width: 855px) {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+.btn, .dropdown-menu {
+  font-size: 1em;
+}
+
+.btn-group .btn-primary:first-child {
+  width: 200px;
+}
+
+main {
+
+  h3 {
+    padding: 1em 0 0.3em 0;
+    font-size: 1.7rem;
+    position: absolute;
+    top: 14px;
+    left: 1em;
+    color: #0C7ECF;
+  }
+
+  p {
+    padding: 0 1em 1em;
+    margin-top: 2em;
+    font-size: 1.1em;
+    /* Android width */
+    @media (max-width: 360px) {
+        padding: 0;
+        font-size: 0.85em;
+    }
+  }
+}
+
+.service-box {
+  background-color: #5352ed;
+  color: #fff;
+  width: 90%;
+  border-radius: 5px;
+  margin-bottom: 40px;
+  margin-left: 2em;
+
+  div:first-child {
+    border-top-left-radius: 5px;
+  }
+}
+
+/* Hidden by default, displayed when corresponding navigation li is clicked */
+#div-all-services, #div-healthy, #div-recently-down, #div-currently-down, #div-flapping {
+  display: none;
+}
+
+/* This class is dynamically added to the div's we want to make visible */
+.div-visible {
+  display: block !important;
+}
+
+#div-healthy .service-box {
+  background-color: #05c46b;
+}
+
+/* Add service record form */
+#service-form {
+
+  @media (max-width: 855px) {
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .form-group {
+    margin: 1.5em 0 0 1.5em;
+    &:last-of-type {
+      margin-top: 1em;
+    }
+    @media (max-width: 855px) {
+      margin-left: 0;
+    }
+  }
+
+  label {
+    display: block;
+    color: #fff;
+    margin-bottom: 2px;
+  }
+
+  .help-text {
+    color: #fff;
+    font-size: 0.9em;
+    margin-top: 10px;
+  }
+
+  input[type="text"], input[type="number"] {
+    width: 250px;
+  }
+
+input[type="submit"] {
+  display: block;
+  height: 35px;
+  width: 250px;
+  margin-left: 0;
+  color: #fff;
+  background-color: #ac3572;
+  border: 1px solid #ac3572;
+  border-radius: 2px;
+}
+
+  label, .help-text, input[type="text"],
+  input[type="number"], input[type="submit"] {
+    @media (max-width: 855px) {
+      width: 80%;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}
+
+/* Form Errors styling */
+.form-errors {
+  padding: 1.75rem 1.25rem 0 1.25rem;
+
+  p {
+    margin-bottom: 1em;
+    color: #de6114;
+    font-weight: 500;
+  }
+}
+
+ul.errorlist li {
+  color: #de6114;
+  line-height: 1.2em;
+  list-style: disc;
+  font-size: 1em;
+  padding: 0;
+  margin: 1em 1.6em;
+  &:hover {
+    background-color: inherit;
+    color: #de6114;
+  }
+}
+
+.error {
+  input, select {
+    border-color: #E56E25 !important;
+  }
+  label, label:after {
+    color: #E56E25 !important;
+  }
+}
+
+/*  API error messages */
+.message-errors {
+  width: 80%;
+  border: 1px solid red;
+  border-radius: 2px;
+  margin: 4em auto;
+  padding: 1em;
+  background-color: #fff;
+}
+ul.errorlist {
+  padding: 0;
+
+  li.error {
+    color: red;
+    font-size: 16px;
+    font-weight: 500;
+  }
+}
+
+/* Form success message */
+  .message-success {
+    width: 80%;
+    border: 1px solid #019CE0;
+    border-radius: 2px;
+    margin: 4em auto;
+    padding: 1em;
+    background-color: #fff;
+
+    p.success {
+      font-size: 16px;
+      margin: 0;
+      padding: 0.5em 1em 1em 1.5em;
+      a {
+        color: #019CE0;
+      }
+    }
+  }
+
+  .modal-dialog-messages {
+    max-width: 500px;
+    margin: 1.75rem auto;
+    button.close {
+      font-size: 2em;
+    }
+  }
+
+/* Icons */
+.fa.fa-search {
+    color: #019CE0;
+    font-size: 20px;
+    margin-left: 0.5em;
+}
+
+.fa.fa-chevron-down, .fa.fa-chevron-up {
+  font-size: 20px;
+  color: #fff;
+}
+
+/* Tables styling */
+
+.table-wrapper {
+  margin: 2em 2em 0 2em;
+}
+
+.table {
+  border-radius: 5px;
+
+  thead th {
+    border: 0;
+  }
+
+  thead th a {
+    color: inherit;
+  }
+
+  tbody td, .table tbody th {
+    vertical-align: middle;
+  }
+
+  thead th, tbody td, tbody th {
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .service-id {
+    color: #fff;
+    background-color: #019CE0;
+    text-align: center;
+  }
+}
+
+  table.dataTable {
+    th.dataTables_empty,
+    td.dataTables_empty {
+      color: #0C7ECF;
+    }
+  }
+
+/* Bootstrap modal for filtering services */
+#filtersModal {
+  padding-left: 10em;
+  @media (max-width: 855px) {
+    padding: 0;
+  }
+
+  .modal-header {
+    display: block;
+
+    h4.modal-title {
+      font-size: 18px;
+      font-weight: 300;
+    }
+    button.close {
+      color: inherit;
+    }
+  }
+
+  form {
+    p {
+      margin-bottom: 10px;
+    }
+    label {
+      max-width: 100%;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    input {
+      width: 90%;
+    }
+  }
+
+  .modal-footer button {
+    margin: 0;
+  }
+}
+
+  /* Button that toggles the filtering modal */
+  #filter-btn {
+    height: 80px;
+    margin-right: 2em;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-flow: row wrap;
+    flex-flow: row wrap;
+    justify-content: flex-end;
+    @media (max-width: 855px) {
+      margin-right: 1em;
+    }
+
+    .btn-group {
+      height: 35px;
+      margin-top: 40px;
+    }
+  }
+
+  // Recolors
+  .btn-primary {
+    background-color: #00B9F2;
+    border-color: whitesmoke;
+    &:hover, &:active, &:focus {
+      background-color: #019CE0;
+      border-color: #019CE0;
+    }
+  }
+  .page-item.active .page-link {
+    background-color: #00B9F2;
+    border-color: #00B9F2;
+  }
+  .page-link {
+    color: #019CE0;
+  }

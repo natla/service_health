@@ -1,0 +1,166 @@
+{% extends "service_outages/services-monitor-base.html" %}
+
+{% block content%}
+
+{# Include the modal for filtering services #}
+{% include 'service_outages/filter-modal.html' %}
+
+<main id="main">
+
+  {# Display error messages from the API #}
+  {% if error_messages %}
+    {% include 'service_outages/errors-modal.html' %}
+  {% endif %}
+
+  {# Display form success message. There is only one success message #}
+  {% if success_message %}
+    {% include 'service_outages/success-modal.html' %}
+  {% endif %}
+
+  <div id="div-all-services" class="div-visible">
+
+    <h3>All Services</h3>
+    <hr>
+    <div class="table-wrapper">
+      <table class="service-table table table-bordered table-hover table-responsive-md">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Service ID</th>
+            <th scope="col">Outage Duration</th>
+            <th scope="col">Outage Start Timе</th>
+            <th scope="col">Outage End Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for service in all_services %}
+          <tr>
+            <th scope="row" class="service-id">{{ service.service_id }}</th>
+            <td>{{ service.duration }}</td>
+            <td>{{ service.start_time }}</td>
+            <td>{{ service.end_time }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="div-healthy" class="">
+    <h3>Healthy Services</h3>
+    <hr>
+    <p>Records of services that are up and haven't been recently down</p>
+
+    <div class="table-wrapper">
+      <table class="service-table table table-bordered table-hover table-responsive-md">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Service ID</th>
+            <th scope="col">Outage Duration</th>
+            <th scope="col">Outage Start Timе</th>
+            <th scope="col">Outage End Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for service in healthy_services %}
+          <tr>
+            <th scope="row" class="service-id">{{ service.service_id }}</th>
+            <td>{{ service.duration }}</td>
+            <td>{{ service.start_time }}</td>
+            <td>{{ service.end_time }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="div-currently-down" class="">
+    <h3>Services Currently Down</h3>
+    <hr>
+    <p>Records of services that are down now</p>
+
+    <div class="table-wrapper">
+      <table class="service-table table table-bordered table-hover table-responsive-md">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Service ID</th>
+            <th scope="col">Outage Duration</th>
+            <th scope="col">Outage Start Time</th>
+            <th scope="col">Outage End Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for service in currently_down_services %}
+          <tr>
+            <th scope="row" class="service-id">{{ service.service_id }}</th>
+            <td>{{ service.duration }}</td>
+            <td>{{ service.start_time }}</td>
+            <td>{{ service.end_time }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="div-recently-down" class="">
+    <h3>Services Recently Down</h3>
+    <hr>
+    <p>Records of service outage that has started in the past 3 hours</p>
+
+    <div class="table-wrapper">
+      <table class="service-table table table-bordered table-hover table-responsive-md">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Service ID</th>
+            <th scope="col">Outage Duration</th>
+            <th scope="col">Outage Start Time</th>
+            <th scope="col">Outage End Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for service in recently_down_services %}
+          <tr>
+            <th scope="row" class="service-id">{{ service.service_id }}</th>
+            <td>{{ service.duration }}</td>
+            <td>{{ service.start_time }}</td>
+            <td>{{ service.end_time }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="div-flapping" class="">
+    <h3>Flapping Services</h3>
+    <hr>
+    <p>Records of services with an accumulated 15 minutes of downtime in a 2-hour timeframe</p>
+
+    <div class="table-wrapper">
+      <table class="service-table table table-bordered table-hover table-responsive-md">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Service ID</th>
+            <th scope="col">Outage Duration</th>
+            <th scope="col">Outage Start Time</th>
+            <th scope="col">Outage End Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for service_set in flapping_services %}
+            {% for service in service_set %}
+            <tr>
+              <th scope="row" class="service-id">{{ service.service_id }}</th>
+              <td>{{ service.duration }}</td>
+              <td>{{ service.start_time }}</td>
+              <td>{{ service.end_time }}</td>
+            </tr>
+            {% endfor %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+{% endblock %}

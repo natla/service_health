@@ -1,0 +1,49 @@
+{# Reproduce on the frontend the filtering functionality that is present in the API #}
+
+<div id="filter-btn">
+  <div class="btn-group" style="float: right;">
+    <button type="button" class="btn btn-primary">
+      Filter Services By...
+    </button>
+    <button type="button" id="modal-toggle" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+      data-toggle="modal" data-target="#filtersModal">
+    </button>
+  </div>
+</div>
+<div class="modal fade" id="filtersModal" tabindex="-1" role="dialog" aria-labelledby="filtersModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 id="filtersModalLabel" class="modal-title">Service outage record filters</h4>
+      </div>
+      <form class="form" action="" method="get">
+        <div class="modal-body">
+          <p><label for="id_service_id_filter">Service ID:</label> <input type="number" name="service_id" min="1" id="id_service_id_filter"></p>
+          <p><label for="id_duration_filter">Outage Duration:</label> <input type="number" name="duration" min="1" id="id_duration_filter"></p>
+          <p><label for="id_duration__lte">Duration is less than or equal to:</label> <input type="number" name="duration__lte" min="1" id="id_duration__lte"></p>
+          <p><label for="id_duration__gte">Duration is greater than or equal to:</label> <input type="number" name="duration__gte" min="1" id="id_duration__gte"></p>
+          <p><label for="id_start_time_filter">Outage Start time:</label> <input type="text" name="start_time" min="1" id="id_start_time_filter"></p>
+          <p><label for="id_start_time__lte">Start time is less than or equal to:</label> <input type="text" name="start_time__lte" min="1" id="id_start_time__lte"></p>
+          <p><label for="id_start_time__gte">Start time is greater than or equal to:</label> <input type="text" name="start_time__gte" min="1" id="id_start_time__gte"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% comment %}
+FIXME: Use templating iso hardcoding values, for example:
+    <div class="modal-body">
+        {% for element in elements %}
+          {{ element }}
+        {% endfor %}
+    </div>
+TODO: Implement functionality for resetting and clearing the filters
+(currently the way to clear the filters is to reload the home URL)
+{% endcomment %}

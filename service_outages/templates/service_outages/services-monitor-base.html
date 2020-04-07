@@ -1,0 +1,77 @@
+{% load compress %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>{% block title %}Service Health Monitor{% endblock %}</title>
+
+  {% block style %}
+    {# Typography #}
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+    {# Bootstrap CSS #}
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+    {# Custom project CSS #}
+    {% compress css %}
+    <link href="{% static 'css/services_monitor.scss' %}" rel="stylesheet" type="text/x-scss">
+    {% endcompress %}
+  {% endblock %}
+</head>
+<body>
+
+  {# TODO: Add header #}
+  <header id="header"></header>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <h2><a href="/">Service Monitor</a></h2>
+        {% block navigation %}
+          <nav id="main-nav">
+            <ul>
+              <li id="all-services" class="active">All Services</li>
+              <li id="healthy">Healthy Services</li>
+              <li id="currently-down">Services currently down</li>
+              <li id="recently-down">Services recently down</li>
+              <li id="flapping">Services Flapping</li>
+              <li id="new-service">Add Service Outage Record<br>
+              &ensp;<i class="fa fa-chevron-down" aria-hidden="true"></i></li>
+
+              {# Include the form for adding new service records #}
+              {% include 'service_outages/service-form.html' %}
+            </ul>
+        </nav>
+      {% endblock %}
+      </div>
+
+      <div class="col-8">
+        {% block content %}
+        {% endblock %}
+      </div>
+
+    </div>
+  </div>
+
+  {# TODO: Add footer #}
+  <footer id="footer"></footer>
+
+  {% block javascript %}
+    {# jQuery, Popper.js, Bootstrap JS #}
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    {# Make the service table searchable and sortable  #}
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    {# Font Awesome #}
+    <script src="https://use.fontawesome.com/d5f325af29.js"></script>
+    {# Custom js #}
+    <script async src="{% static 'js/services_monitor.js' %}"></script>
+  {% endblock %}
+</body>
+</html>

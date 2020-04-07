@@ -1,0 +1,14 @@
+<div id="errorsModal" class="modal">
+  <div class="modal-dialog-messages">
+    <div class="modal-body message-errors">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <ul class="errorlist">
+        {% for message in error_messages %}
+          <li class="error">{{ message|safe }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
