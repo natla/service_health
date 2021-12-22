@@ -44,7 +44,7 @@ class ServiceRecordsListView(mixins.ListModelMixin, mixins.CreateModelMixin, gen
             messages.error(request, 'Services could not be fetched from the API.')
         return response
 
-    def post(self, request, format=None, *args, **kwargs):
+    def post(self, request, *args, format=None, **kwargs):
         """
         After the service records are created, return the entire queryset.
 
@@ -129,7 +129,7 @@ class ServiceOutageRecordView(TemplateView):
         """
 
         api_list_view_instance = ServiceRecordsListView.as_view()
-        self.queryset = api_list_view_instance(request).data
+        queryset = api_list_view_instance(request).data
 
         if request.method == "POST":
             form = AddServiceRecordForm(request.POST)
@@ -146,10 +146,10 @@ class ServiceOutageRecordView(TemplateView):
 
         return render(request, self.template_name, {
             'localized_datetime_now': self.local_tz.localize(datetime.now()),
-            'all_services': self.queryset,
-            'healthy_services': self.healthy_services(request),
-            'currently_down_services': self.currently_down_services(),
-            'recently_down_services': self.recently_down_services(),
+            'all_services': queryset,
+            'healthy_services': self.healthy_services(request, queryset),
+            'currently_down_services': self.currently_down_services(queryset),
+            'recently_down_services': self.recently_down_services(queryset),
             'flapping_services': self.flapping_scenarios(),
             'error_messages': self.get_error_messages(request),
             'success_message': self.get_success_message(request),
@@ -169,17 +169,17 @@ class ServiceOutageRecordView(TemplateView):
         success_message_const = DEFAULT_LEVELS.get('SUCCESS')
         return [message for message in messages_obj if message.level == success_message_const]
 
-    def healthy_services(self, request):
-        """Return the healthy services either from the API"""
-        return [obj for obj in self.queryset if obj.get('healthy_service')]
+    def healthy_services(self, request, queryset):
+        """Return the healthy services from the API"""
+        return [obj for obj in queryset if obj.get('healthy_service')]
 
-    def currently_down_services(self):
-        """Return the currently down services either from the API"""
-        return [obj for obj in self.queryset if obj.get('service_currently_down')]
+    def currently_down_services(self, queryset):
+        """Return the currently down services from the API"""
+        return [obj for obj in queryset if obj.get('service_currently_down')]
 
-    def recently_down_services(self):
-        """Return the recently down services either from the API"""
-        return [obj for obj in self.queryset if obj.get('service_recently_down')]
+    def recently_down_services(self, queryset):
+        """Return the recently down services from the API"""
+        return [obj for obj in queryset if obj.get('service_recently_down')]
 
     def flapping_scenarios(self):
         """Return a list of flapping services"""
@@ -190,7 +190,7 @@ class ServiceOutageRecordView(TemplateView):
     def create_service_dict(self, queryset):
         """
         Given a queryset of ServiceOutageRecord objects, create a nested
-        dictionary where the service is mapped to a dictionary of lists
+        dictionary where a service is mapped to a dictionary of lists
         containing the duration, start_time and end_time values.
 
         We need the service data structured in dictionaries in order
@@ -214,42 +214,65 @@ class ServiceOutageRecordView(TemplateView):
     def detect_flapping_scenarios(self, dataset=None):
         """
         Accept an optional dictionary dataset and return a list of services that
-        have been down an accumulated 15 minutes of downtime in a 2-hour timeframe.
-        The outages must be more than one for the 2-hour flapping interval.
+        have been down for at least 15 minutes cumulatively in a 2-hour timeframe.
+        The outages must be more than one in the 2-hour flapping interval.
         """
 
         flapping_results = []
-        flapping_interval = 120  # 2 hours
         flapping_frequency = 15  # 15 minutes
+        flapping_interval = 120  # 2 hours
 
         # Prepare the data by sorting it in a dictionary
         dataset = dataset or self.create_service_dict(ServiceOutageRecord.objects.all().order_by('start_time'))
         for service_id in dataset:
-            service_duration_list = dataset[service_id]['duration']
-            service_start_time_list = dataset[service_id]['start_time']
-            service_endtime_list = dataset[service_id]['end_time']
-            flapping_end_time = service_start_time_list[0] + timedelta(minutes=flapping_interval)
 
-            # The outages are more than one, and their sum is between 15 and 120 minutes
-            if len(service_duration_list) > 1 and (
-                    flapping_frequency <= sum(service_duration_list) < flapping_interval):
+            flapping_results.extend(self.detect_flapping_per_service(
+                service_id, dataset, flapping_frequency, flapping_interval))
 
-                sum_outages = 0
-                amount_outages = 0
-
-                for idx in range(len(service_duration_list) - 1):
-                    # Check that the sum of outages doesn't exceed the flapping frequency
-                    while sum_outages < flapping_frequency and (
-                            # The current outage must end before the end of the flapping interval
-                            service_endtime_list[idx] <= flapping_end_time):
-                        sum_outages += service_duration_list[idx]
-                        amount_outages += 1
-                        idx += 1
-
-                    # If the sum of the outages reaches or exceeds the flapping frequency
-                    # and the amount of outages is more than 1, add the service ID to results
-                    else:
-                        if sum_outages >= flapping_frequency and amount_outages > 1:
-                            flapping_results.append(service_id)
-                        break
         return flapping_results
+
+    def detect_flapping_per_service(self, service_id, dataset, flapping_frequency, flapping_interval):
+        """
+        Check if a service has been down an accumulated flapping_frequency amount of time
+        in the given flapping interval.
+
+        If the sum of that service outages reaches or exceeds the flapping frequency
+        within the flapping interval and the amount of outages is greater than 1,
+        add the service ID to the results list.
+
+        Return the updated results list.
+        """
+        sum_outages = 0
+        amount_outages = 0
+        results = []
+
+        outage_duration_list = dataset[service_id]['duration']
+        outage_start_time_list = dataset[service_id]['start_time']
+        outage_endtime_list = dataset[service_id]['end_time']
+        flapping_end_time = outage_start_time_list[0] + timedelta(minutes=flapping_interval)
+
+        # The amount of outages must be greater than one
+        if len(outage_duration_list) <= 1:
+            return results
+
+        for idx, duration in enumerate(outage_duration_list):
+
+            # Keep track of when one outage ends and another one starts
+            outage_difference = outage_start_time_list[idx] - outage_endtime_list[idx - 1] if idx - 1 != -1 else 0
+            if outage_difference and outage_difference > timedelta(minutes=flapping_interval):
+
+                # If there is more than 120-minute time difference between outages, reset the variables
+                flapping_end_time = outage_start_time_list[idx] + timedelta(minutes=flapping_interval)
+                sum_outages = duration
+                amount_outages = 1
+            else:
+                sum_outages += duration
+                amount_outages += 1
+
+            if flapping_frequency <= sum_outages <= flapping_interval and amount_outages > 1 and (
+                    # The current outage must end before the end of the flapping interval
+                    outage_endtime_list[idx] <= flapping_end_time):
+                results.append(service_id)
+                break
+
+        return results
