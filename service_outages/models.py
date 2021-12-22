@@ -8,8 +8,7 @@ from django.db.models.constraints import UniqueConstraint
 
 
 class ServiceOutageRecord(models.Model):
-    """
-    Class to create records of service outage data of an application.
+    """Class to create records of service outage data of an application.
 
     The objects of the class are service records, not the services
     themselves, i.e. there can be multiple records per service
@@ -24,12 +23,11 @@ class ServiceOutageRecord(models.Model):
 
     service_id = models.PositiveIntegerField(validators=[MinValueValidator(1)], default=1000)
     duration = models.PositiveIntegerField(validators=[MinValueValidator(1)], default=1)
-    start_time = models.DateTimeField(default=datetime.now())
+    start_time = models.DateTimeField(default=pytz.utc.localize(datetime.now()))
     end_time = models.DateTimeField(null=True)
 
     def __init__(self, *args, **kwargs):
-        """
-        Calculate end_time based on start_time and duration.
+        """Calculate end_time based on start_time and duration.
 
         This is necessary for adding new services to the API through the
         frontend UI, since only start_time and duration get provided in the form.
@@ -56,11 +54,9 @@ class ServiceOutageRecord(models.Model):
 
     @property
     def service_currently_down(self):
-        """Return True if a service is currently down"""
+        """Return True if a service is currently down, False otherwise."""
 
-        # Use local timezone for datetime.now()
-        if self.end_time:
-            return self.start_time <= self.local_tz.localize(datetime.now()) <= self.end_time
+        return self.end_time and self.start_time <= self.local_tz.localize(datetime.now()) <= self.end_time
 
     @property
     def service_recently_down(self):
@@ -68,5 +64,4 @@ class ServiceOutageRecord(models.Model):
 
         outage_history_start = self.local_tz.localize(datetime.now()) - timedelta(hours=3)
 
-        # Use local timezone for datetime.now()
         return outage_history_start <= self.start_time <= self.local_tz.localize(datetime.now())

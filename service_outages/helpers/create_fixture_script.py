@@ -1,4 +1,5 @@
 import json
+import pytz
 
 from datetime import datetime, timedelta
 
@@ -16,12 +17,13 @@ def create_fixture(source_file, fixture_file):
         item['pk'] = idx + 1
         item['model'] = 'service_outages.ServiceOutageRecord'
         start_time = datetime.strptime(item['startTime'], '%Y-%m-%d %H:%M:%S')
+        start_time = pytz.utc.localize(start_time)
         end_time = start_time + timedelta(minutes=item['duration'])
         item['fields'] = {
             'service_id': item['id'],
             'duration': item['duration'],
-            'start_time': datetime.strftime(start_time, '%Y-%m-%d %H:%M:%S'),
-            'end_time': datetime.strftime(end_time, '%Y-%m-%d %H:%M:%S'),
+            'start_time': datetime.strftime(start_time, '%Y-%m-%d %H:%M:%S%z'),
+            'end_time': datetime.strftime(end_time, '%Y-%m-%d %H:%M:%S%z'),
         }
         del item['id']
         del item['duration']

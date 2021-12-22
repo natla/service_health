@@ -42,6 +42,17 @@ class ServiceFlappingTest(TestCase):
                     datetime.datetime(2019, 7, 15, 4, 27, 19, tzinfo=pytz.utc),
                     datetime.datetime(2019, 7, 15, 5, 00, 19, tzinfo=pytz.utc),
                     datetime.datetime(2019, 7, 15, 7, 23, 19, tzinfo=pytz.utc)]},
+            # Second and third outage combined are exactly 119 minutes within a 2-hour interval
+            'partial_outage_match': {
+                'duration': [5, 9, 110],
+                'start_time': [
+                    datetime.datetime(2019, 7, 13, 7, 18, 19, tzinfo=pytz.utc),
+                    datetime.datetime(2019, 7, 15, 4, 18, 19, tzinfo=pytz.utc),
+                    datetime.datetime(2019, 7, 15, 4, 28, 19, tzinfo=pytz.utc)],
+                'end_time': [
+                    datetime.datetime(2019, 7, 13, 7, 23, 19, tzinfo=pytz.utc),
+                    datetime.datetime(2019, 7, 15, 4, 27, 19, tzinfo=pytz.utc),
+                    datetime.datetime(2019, 7, 15, 6, 18, 19, tzinfo=pytz.utc)]},
 
             # The following services must not be in the flapping results:
 
@@ -55,7 +66,7 @@ class ServiceFlappingTest(TestCase):
                     datetime.datetime(2019, 7, 15, 4, 20, 19, tzinfo=pytz.utc),
                     datetime.datetime(2019, 7, 15, 6, 42, 19, tzinfo=pytz.utc)]},
             # Outage duration is 15 minutes, but it is just one outage in the 2-hour interval
-            'exact_outage': {
+            'single_exact_outage': {
                 'duration': [15],
                 'start_time': [datetime.datetime(2019, 7, 15, 4, 18, 19, tzinfo=pytz.utc)],
                 'end_time': [datetime.datetime(2019, 7, 15, 4, 33, 19, tzinfo=pytz.utc)]},
@@ -85,7 +96,8 @@ class ServiceFlappingTest(TestCase):
         result = self.test_view.detect_flapping_scenarios(self.test_services_dict)
         self.assertIn('exact_outage_sum', result)
         self.assertIn('individual_outage_match', result)
+        self.assertIn('partial_outage_match', result)
         self.assertNotIn('long_outage', result)
-        self.assertNotIn('exact_outage', result)
+        self.assertNotIn('single_exact_outage', result)
         self.assertNotIn('shorter_outage_sum', result)
         self.assertNotIn('outage_sum_outside_flap_interval', result)
