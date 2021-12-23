@@ -42,7 +42,6 @@ Allows to get a list of records for a specific service with id=service_id, post 
 
 - Class `ServiceRecordsDetailView`: Implement method put() to make it possible to update existing services.
 - Reimplement the frontend using React.js.
-- UX Improvement: Add a calendar/clock widget to make it possible for the user to select service start times  (currently it is necessary to enter a specific datetime format as a text in order to add a new record).
 - Add header / footer to the frontend page
 - On auto refresh, reload only the service data in the table instead of the entire page
 - Rework the templates to minimize hardcoding

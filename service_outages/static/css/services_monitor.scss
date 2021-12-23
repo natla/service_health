@@ -55,6 +55,7 @@ nav {
   min-width: 290px;
   background-color: #2f3542;
   padding: 0 !important;
+  z-index: 100;
   /* Only stick nav if it can fit */
   @media (min-height: 300px) {
     position: sticky !important;
@@ -188,6 +189,7 @@ main {
 }
 /* Add service record form */
 #service-form {
+  padding-bottom: 2em;
   @media (max-width: 855px) {
     width: auto;
     margin-left: auto;
@@ -331,7 +333,7 @@ ul.errorlist {
 }
 /* Icons */
 .fa.fa-search {
-  color: #019CE0;
+  color: #019ce0;
   font-size: 20px;
   margin-left: 0.5em;
 }
@@ -340,6 +342,12 @@ ul.errorlist {
 .fa.fa-chevron-up {
   font-size: 20px;
   color: #fff;
+}
+
+.bootstrap-datetimepicker-widget .fa.fa-chevron-down,
+.bootstrap-datetimepicker-widget .fa.fa-chevron-up {
+  font-size: 1em;
+  color: #2f3542;
 }
 /* Tables styling */
 .table-wrapper {
@@ -409,22 +417,26 @@ table.dataTable {
 
   form {
     p {
-      margin-bottom: 10px;
+      margin: 0 auto 10px;
+      width: 100%;
     }
 
     label {
       max-width: 100%;
       font-weight: 600;
       margin-bottom: 5px;
+      margin-left: 2rem;
     }
 
     input {
-      width: 90%;
+      width: 83%;
+      margin-left: 2rem;
     }
   }
 
   .modal-footer button {
-    margin: 0;
+    margin: 0 auto;
+    width: 80%;
   }
 }
 /* Button that toggles the filtering modal */

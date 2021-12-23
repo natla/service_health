@@ -49,8 +49,26 @@ $(document).ready(function() {
   // Activate the modal functionality of the API error messages
   $('#errorsModal').modal();
 
+  // DateTimePicker widget for the "Outage Start Datetime" input field
+  // in the "Add Service Outage Record" form,
+  // as well as the relevant fields in the filtering menu.
+  const dateTimePicker = {
+      format: 'YYYY-MM-DD HH:mm:ss',
+      showClear: true,
+      showClose: true,
+      sideBySide: true,
+  }
+
+  $('#id_start_time').datetimepicker(dateTimePicker);
+
+  $('#id_start_time_filter').datetimepicker(dateTimePicker);
+
+  $('#id_start_time__lte').datetimepicker(dateTimePicker);
+
+  $('#id_start_time__gte').datetimepicker(dateTimePicker);
+
+  // Every 5 minutes, automatically reload the page.
   // FIXME: Reload only the service data in the table instead of the entire page
-  // Every 5 minutes, automatically reload the page
   function autoReload() {
     setTimeout(function() {
       $.ajax({

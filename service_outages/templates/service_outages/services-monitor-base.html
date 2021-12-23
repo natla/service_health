@@ -16,6 +16,7 @@
     {# Bootstrap CSS #}
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-datetimepicker.css' %}">
     {# Custom project CSS #}
     {% compress css %}
     <link href="{% static 'css/services_monitor.scss' %}" rel="stylesheet" type="text/x-scss">
@@ -39,8 +40,7 @@
               <li id="currently-down">Services currently down</li>
               <li id="recently-down">Services recently down</li>
               <li id="flapping">Services Flapping</li>
-              <li id="new-service">Add Service Outage Record<br>
-              &ensp;<i class="fa fa-chevron-down" aria-hidden="true"></i></li>
+              <li id="new-service">Add Service Outage Record<br></li>
 
               {# Include the form for adding new service records #}
               {% include 'service_outages/service-form.html' %}
@@ -70,8 +70,13 @@
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
     {# Font Awesome #}
     <script src="https://use.fontawesome.com/d5f325af29.js"></script>
+    {# Moment.js #}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js" integrity="sha512-LGXaggshOkD/at6PFNcp2V2unf9LzFq6LE+sChH7ceMTDP0g2kn6Vxwgg7wkPP7AAtX+lmPqPdxB47A0Nz0cMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    {# Bootstrap 4 DateTimePicker #}
+    <script async src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
     {# Custom js #}
     <script async src="{% static 'js/services_monitor.js' %}"></script>
+
   {% endblock %}
 </body>
 </html>

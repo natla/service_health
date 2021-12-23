@@ -18,15 +18,14 @@ class AddServiceRecordForm(ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['service_id'].label = 'Service ID'
         self.fields['duration'].label = 'Service Outage Duration'
-        self.fields['start_time'].label = 'Outage Start Datetime'
+        self.fields['start_time'].label = 'Service Outage Start Datetime'
 
         # Enforce numbers starting from 1 on the client side
         self.fields['service_id'].widget = forms.NumberInput(attrs={'min': '1'})
         self.fields['duration'].widget = forms.NumberInput(attrs={'min': '1'})
 
         # Enforce datetime formatting
-        self.fields['start_time'].help_text = "Use format YYYY-MM-DD hh:mm:ss"
-        self.fields['start_time'].input_formats = ['%Y-%m-%d %H:%M:%S']
+        self.fields['start_time'].widget = forms.DateTimeInput(format='%Y-%m-%d %H:%M:%S')
 
         # Reset the initial values - we don't want to display in the form
         # the default values that were set for the model, they would confuse the user
