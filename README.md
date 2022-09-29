@@ -24,17 +24,17 @@ The backend is written in Python and Django (using [Django REST framework](https
 The frontend is written in HTML/CSS/JS (used libraries: jQuery, Bootstrap)
 
 ## Live app version (frontend UI)
-https://services-health-monitor.herokuapp.com/
+[https://service-health.onrender.com/](https://service-health.onrender.com/)
 
 ## API endpoints
 ### List of all available services and their outage data:
-https://services-health-monitor.herokuapp.com/api/v1/services/
+[https://service-health.onrender.com/api/v1/services/](https://service-health.onrender.com/api/v1/services/)
 
 Get all services from the database or post a new service record.
 To bulk-create new services, provide a list of dictionaries.
 
 ### Detailed view of a single service:
-https://services-health-monitor.herokuapp.com/api/v1/services/<service_id>/
+[https://service-health.onrender.com/api/v1/services/](https://service-health.onrender.com/api/v1/services/)<service_id>/
 
 Allows to get a list of records for a specific service with id=service_id, post a new record, or delete the service record.
 
