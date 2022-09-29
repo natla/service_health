@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'cg#p$g+j9tax!#a3cup@1$8obt2_+&k3q+pmu)5%as
 # Read DJANGO_DEBUG from .env
 DEBUG = os.getenv('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = ['services-health-monitor.herokuapp.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['service-health.onrender.com', 'localhost', '127.0.0.1']
 
 # Application definition
 
@@ -93,7 +93,7 @@ WSGI_APPLICATION = 'service_health.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-# Heroku: Update database configuration from $DATABASE_URL.
+# Render: Update database configuration from $DATABASE_URL.
 DATABASES = {
     'default': dj_database_url.config(
         default=os.getenv('DATABASE_URL'),
